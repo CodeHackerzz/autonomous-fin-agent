@@ -277,3 +277,13 @@ Data Input: PDF-based live document uploads
 ✔️ MVP-ready for hackathon evaluation
 
 🔄 Backend streaming integration planned for future versions
+
+ MVP Visuals
+ 
+ ![WhatsApp Image 2025-12-28 at 8 57 59 PM](https://github.com/user-attachments/assets/e811c797-0104-4768-8357-15275e7d40be)
+
+ ![WhatsApp Image 2025-12-28 at 8 58 00 PM](https://github.com/user-attachments/assets/2c005e26-1896-4b70-a683-df7b6d684e4f)
+
+![WhatsApp Image 2025-12-28 at 8 58 01 PM](https://github.com/user-attachments/assets/306a05a8-e225-446c-9315-1611dbf0fc5b)
+
+![WhatsApp Image 2025-12-28 at 8 58 01 PM (1)](https://github.com/user-attachments/assets/81a109da-0bbc-4072-8e61-e8f4f2659995)
