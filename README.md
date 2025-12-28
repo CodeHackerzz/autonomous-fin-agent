@@ -1,7 +1,7 @@
-**🚀 Autonomous Financial Intelligence Agent (Live & Agentic)
+🚀 Autonomous Financial Intelligence Agent (Live & Agentic)
 
 🧩 Problem Statement
-**
+
 Financial monitoring systems today are largely reactive.
 Insights are generated only after risks materialize—such as margin erosion, fraud incidents, or liquidity stress—leading to delayed decision-making and higher exposure.
 
