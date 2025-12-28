@@ -1,8 +1,5 @@
 🚀 Autonomous Financial Intelligence Agent (Live & Agentic)
 
-🔗 GitHub Repository
-👉 (Add your GitHub link here)
-
 🧩 Problem Statement
 
 Financial monitoring systems today are largely reactive.
