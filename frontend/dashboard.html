@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Autonomous Financial Intelligence Agent</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+  background: radial-gradient(circle at top, #0f172a, #020617 70%);
+}
+
+.card {
+  background: linear-gradient(145deg,#0b1224,#020617);
+  border-radius: 18px;
+  border: 1px solid rgba(99,102,241,.15);
+}
+.event-card {
+  animation: slideIn .6s ease forwards;
+}
+@keyframes slideIn {
+  from {opacity:0; transform:translateY(10px);}
+  to {opacity:1; transform:translateY(0);}
+}
+
+.sev-low { background: linear-gradient(90deg,#22c55e 40%,#1f2937 40%); }
+.sev-medium { background: linear-gradient(90deg,#eab308 70%,#1f2937 70%); }
+.sev-critical { background: linear-gradient(90deg,#ef4444 90%,#1f2937 90%); }
+
+.pulse {
+  animation: pulseGlow 2s infinite;
+}
+@keyframes pulseGlow {
+  0% { box-shadow:0 0 12px rgba(99,102,241,.4);}
+  50% { box-shadow:0 0 30px rgba(168,85,247,.9);}
+  100% { box-shadow:0 0 12px rgba(99,102,241,.4);}
+}
+</style>
+</head>
+
+<body class="text-white p-6">
+
+<div class="grid grid-cols-12 gap-6">
+<div class="col-span-3 card p-4">
+<h3 class="text-sm text-indigo-400 mb-3">LIVE AUTONOMOUS EVENTS</h3>
+<div id="events" class="space-y-3 text-xs"></div>
+</div>
+<div class="col-span-6 card p-6 text-center">
+<h2 class="text-sm text-indigo-400 mb-2">AGENT STATUS</h2>
+<h1 class="text-3xl font-bold">AUTONOMOUS MODE</h1>
+<p class="text-gray-400 text-sm mt-2">
+Event-driven reasoning • No prompts • Continuous intelligence
+</p>
+
+<div class="flex justify-center gap-3 mt-4 text-xs">
+<span class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400">Live Streams</span>
+<span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400">Agentic Logic</span>
+<span class="px-3 py-1 rounded-full bg-green-500/20 text-green-400">Stateful</span>
+</div>
+
+<div class="mt-6">
+<input type="file" id="fileInput" class="hidden"/>
+<button onclick="triggerUpload()"
+class="pulse px-8 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 font-semibold">
+INSERT LIVE DATA
+</button>
+</div>
+</div>
+<div class="col-span-3 card p-4">
+<h3 class="text-sm text-red-400 mb-3">AUTONOMOUS WATCHLIST</h3>
+<div id="watchlist" class="space-y-3 text-xs text-gray-300">
+<span class="italic text-gray-400">No sustained risks.</span>
+</div>
+</div>
+<div class="col-span-8 card p-4">
+<h3 class="text-sm text-indigo-400 mb-2">PORTFOLIO RISK TRAJECTORY</h3>
+<canvas id="riskChart" height="140"></canvas>
+</div>
+<div class="col-span-4 card p-4">
+<h3 class="text-sm text-purple-400 mb-2">WHAT-IF SIMULATION</h3>
+<div id="whatIf" class="space-y-3 text-sm text-gray-300 italic">
+Awaiting agent hypothesis…
+</div>
+</div>
+
+</div>
+
+<script>
+const eventsEl = document.getElementById("events");
+const watchlistEl = document.getElementById("watchlist");
+const whatIfEl = document.getElementById("whatIf");
+
+let riskScore = 55;
+let watchActive = false;
+
+function triggerUpload(){
+  document.getElementById("fileInput").click();
+}
+
+document.getElementById("fileInput").addEventListener("change", e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  processFile(file.name.toLowerCase());
+});
+
+function addEvent(title, desc, impact, severity){
+  const sevClass = {
+    low:"sev-low", medium:"sev-medium", critical:"sev-critical"
+  };
+
+  eventsEl.prepend(document.createElement("div"));
+  eventsEl.firstChild.outerHTML = `
+  <div class="event-card bg-indigo-500/10 p-3 rounded-lg">
+    <div class="flex justify-between">
+      <span class="font-semibold">${title}</span>
+      <span class="uppercase text-xs">${severity}</span>
+    </div>
+    <p class="text-gray-300 mt-1">${desc}</p>
+    <p class="text-[11px] text-indigo-300 mt-1">Impact: ${impact}</p>
+    <div class="h-1 mt-2 rounded ${sevClass[severity]}"></div>
+  </div>`;
+}
+
+function processFile(name){
+  eventsEl.innerHTML = "";
+  whatIfEl.innerHTML = "";
+  
+  if(name.includes("earn")){
+    addEvent("EARNINGS PRESSURE",
+      "Operating margin compression detected",
+      "Profitability at risk",
+      "medium");
+    riskScore += 12;
+    setWatch("ABC Ltd","Margin stress");
+    setWhatIf("Cost Inflation Scenario",
+      "Costs rise 5%",
+      "EBITDA declines further",
+      "Medium");
+  }
+  else if(name.includes("trans")){
+    addEvent("FRAUD ALERT",
+      "Unusual transaction frequency spike",
+      "Potential compliance breach",
+      "critical");
+    riskScore += 20;
+    setWatch("XYZ Bank","Fraud exposure");
+    setWhatIf("Fraud Escalation Scenario",
+      "Anomalies persist",
+      "Regulatory scrutiny increases",
+      "High");
+  }
+  else{
+    addEvent("PORTFOLIO SIGNAL",
+      "Cross-company cost pressure detected",
+      "Sector-wide margin impact",
+      "medium");
+    riskScore += 8;
+    setWhatIf("Sector Cost Trend",
+      "Logistics costs rise",
+      "Portfolio volatility increases",
+      "Medium");
+  }
+
+  selfCorrection();
+  updateChart();
+}
+
+function setWatch(name,reason){
+  watchActive = true;
+  watchlistEl.innerHTML = `
+  <div class="bg-red-500/20 p-3 rounded-lg">
+    <div class="font-semibold">${name}</div>
+    <div class="text-xs text-red-300">${reason}</div>
+  </div>`;
+}
+
+function selfCorrection(){
+  setTimeout(()=>{
+    addEvent("AGENT SELF-CORRECTION",
+      "New stabilizing data observed",
+      "Risk outlook adjusted",
+      "low");
+    riskScore -= 10;
+    if(riskScore < 70 && watchActive){
+      watchlistEl.innerHTML = `<span class="italic text-gray-400">
+      Risk stabilized — removed automatically</span>`;
+      watchActive = false;
+    }
+    updateChart();
+  },3000);
+}
+
+function setWhatIf(title,assumption,outcome,confidence){
+  whatIfEl.innerHTML = `
+  <div class="bg-purple-500/20 p-3 rounded-lg">
+    <div class="font-semibold">${title}</div>
+    <div class="text-xs mt-1">Assumption: ${assumption}</div>
+    <div class="text-xs">Outcome: ${outcome}</div>
+    <div class="text-xs text-purple-400 mt-1">
+      Confidence: ${confidence}
+    </div>
+  </div>`;
+}
+
+const ctx = document.getElementById("riskChart");
+const chart = new Chart(ctx,{
+type:"line",
+data:{
+labels:[1,2,3,4,5],
+datasets:[{
+data:[40,45,50,55,60],
+fill:true,
+backgroundColor:"rgba(99,102,241,.25)",
+borderColor:"#6366f1",
+borderWidth:3,
+tension:.4,
+pointRadius:4
+}]
+},
+options:{
+plugins:{legend:{display:false}},
+scales:{
+y:{
+min:0,max:100,
+ticks:{color:"#94a3b8"},
+grid:{color:"rgba(148,163,184,.1)"}
+},
+x:{
+ticks:{color:"#94a3b8"},
+grid:{display:false}
+}
+}
+}
+});
+
+function updateChart(){
+chart.data.datasets[0].data.push(riskScore);
+chart.data.labels.push(chart.data.labels.length+1);
+chart.update();
+}
+</script>
+
+</body>
+</html>
